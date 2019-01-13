@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane id="border" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1300.0" styleClass="css\dark.css" stylesheets="@css/dark.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.wurmcraft.core.controllers.CreationGuiController">
+  <top>
+    <MenuBar id="menu" minWidth="1280.0" stylesheets="@css/dark.css" BorderPane.alignment="CENTER">
+      <menus>
+        <Menu id="file" mnemonicParsing="false" text="File">
+          <items>
+            <MenuItem fx:id="create" mnemonicParsing="false" text="Create" />
+            <MenuItem fx:id="save" mnemonicParsing="false" text="Save" />
+            <MenuItem fx:id="load" mnemonicParsing="false" text="Load" />
+            <MenuItem fx:id="settings" mnemonicParsing="false" text="Settings" />
+            <MenuItem fx:id="close" mnemonicParsing="false" text="Close" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+  </top>
+  <center>
+    <GridPane alignment="CENTER" BorderPane.alignment="TOP_LEFT">
+      <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      </columnConstraints>
+      <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      </rowConstraints>
+      <opaqueInsets>
+        <Insets />
+      </opaqueInsets>
+      <BorderPane.margin>
+        <Insets />
+      </BorderPane.margin>
+      <children>
+        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Minecraft Version" textAlignment="CENTER" wrappingWidth="212.13671875" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+          <font>
+            <Font size="18.0" />
+          </font>
+        </Text>
+        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Forge Version" textAlignment="CENTER" wrappingWidth="212.13671875" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+          <font>
+            <Font size="18.0" />
+          </font>
+        </Text>
+        <JFXComboBox fx:id="minecraftVersion" focusColor="WHITE" prefHeight="25.0" prefWidth="300.0" stylesheets="@css/dark.css" unFocusColor="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <JFXComboBox fx:id="forgeVersion" prefHeight="25.0" prefWidth="300.0" stylesheets="@css/dark.css" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Modpack Version" textAlignment="CENTER" wrappingWidth="212.13671875" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+          <font>
+            <Font size="18.0" />
+          </font>
+        </Text>
+        <JFXTextField fx:id="modpackVersion" maxWidth="300.0" prefHeight="25.0" prefWidth="300.0" stylesheets="@css/dark.css" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+          <font>
+            <Font size="18.0" />
+          </font>
+        </JFXTextField>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Author(s)" textAlignment="CENTER" wrappingWidth="212.13671875" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <JFXTextField id="authors" fx:id="authors" maxWidth="300.0" prefHeight="25.0" prefWidth="300.0" stylesheets="@css/dark.css" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </JFXTextField>
+            <JFXTextField id="name" fx:id="name" maxWidth="300.0" prefHeight="25.0" prefWidth="300.0" stylesheets="@css/dark.css" GridPane.columnIndex="1">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </JFXTextField>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Modpack Name" textAlignment="CENTER" wrappingWidth="212.13671875" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <JFXButton fx:id="createButton" onAction="#onCreate" prefHeight="25.0" prefWidth="300.0" stylesheets="@css/dark.css" text="Create" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="8">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </JFXButton>
+      </children>
+    </GridPane>
+  </center>
+</BorderPane>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane id="border" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1300.0" styleClass="css\dark.css" stylesheets="@css/dark.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.wurmcraft.core.controllers.CoreGuiController">
+   <top>
+      <MenuBar id="menu" minWidth="1280.0" stylesheets="@css/dark.css" BorderPane.alignment="CENTER">
+        <menus>
+          <Menu id="file" mnemonicParsing="false" text="File">
+            <items>
+                  <MenuItem fx:id="create" mnemonicParsing="false" text="Create" />
+                  <MenuItem fx:id="save" mnemonicParsing="false" text="Save" />
+              <MenuItem fx:id="load" mnemonicParsing="false" text="Load" />
+                  <MenuItem fx:id="settings" mnemonicParsing="false" text="Settings" />
+                  <MenuItem fx:id="close" mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <center>
+      <JFXTabPane fx:id="modpackPane" stylesheets="@css/dark.css" BorderPane.alignment="CENTER">
+         <tabs>
+            <Tab text="Mods">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView prefHeight="662.0" prefWidth="1300.0">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="Name" />
+                              <TableColumn prefWidth="266.0" text="Author" />
+                              <TableColumn minWidth="0.0" prefWidth="231.0" text="Version" />
+                              <TableColumn minWidth="0.0" prefWidth="171.0" text="URL" />
+                              <TableColumn minWidth="0.0" prefWidth="171.0" text="Type" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="Config">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+            <Tab text="Scripts">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+               </content>
+            </Tab>
+            <Tab text="Settings">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <GridPane id="curseEnabled" layoutY="-4.0" prefHeight="658.0" prefWidth="1300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="320.0" minWidth="10.0" prefWidth="264.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="607.0" minWidth="10.0" prefWidth="168.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="822.0" minWidth="10.0" prefWidth="591.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="252.0" minWidth="10.0" prefWidth="252.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Enabled Launchers" textAlignment="CENTER" wrappingWidth="245.13671875" GridPane.columnIndex="3">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Text>
+                              <JFXCheckBox fx:id="curseEnabled" mnemonicParsing="false" prefWidth="150.0" text="Curse / Twitch" textFill="WHITE" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </JFXCheckBox>
+                              <JFXCheckBox fx:id="ftbEnabled" mnemonicParsing="false" prefWidth="150.0" text="Feed The Beast" textFill="WHITE" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </JFXCheckBox>
+                              <JFXCheckBox fx:id="technicEnabled" mnemonicParsing="false" prefWidth="150.0" text="Technic" textFill="WHITE" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </JFXCheckBox>
+                              <JFXCheckBox fx:id="atEnabled" mnemonicParsing="false" prefWidth="150.0" text="AT" textFill="WHITE" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </JFXCheckBox>
+                              <JFXCheckBox fx:id="skcraftEnabled" mnemonicParsing="false" prefWidth="150.0" text="SKCraft" textFill="WHITE" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </JFXCheckBox>
+                              <JFXCheckBox fx:id="multicraftEnabled" mnemonicParsing="false" prefWidth="150.0" text="Multicraft" textFill="WHITE" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </JFXCheckBox>
+                              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="General Settings" textAlignment="CENTER" wrappingWidth="175.13671875" GridPane.columnIndex="1">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Text>
+                              <JFXComboBox fx:id="forgeVersion" prefHeight="32.0" prefWidth="152.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                              <Text fill="WHITE" strokeType="INSIDE" strokeWidth="0.0" text="Forge Version" textAlignment="RIGHT" wrappingWidth="250.13671875" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Text>
+                              <JFXComboBox fx:id="minecraftVersion" prefHeight="32.0" prefWidth="152.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                              <Text fill="WHITE" strokeType="INSIDE" strokeWidth="0.0" text="Minecraft Version" textAlignment="RIGHT" wrappingWidth="263.13671875" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </GridPane>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+         </tabs>
+      </JFXTabPane>
+   </center>
+</BorderPane>

@@ -68,7 +68,6 @@ public class CoreGuiController implements Initializable {
     } else {
       modpackPane.setVisible(false);
     }
-    // TODO Load These Values into settings
     // Modpack Export Values
     curseEnabled.selectedProperty().addListener((observable, oldValue, newValue) -> {
       Tread.loadedModpack.export.twitchEnabled = curseEnabled.isSelected();
@@ -121,6 +120,14 @@ public class CoreGuiController implements Initializable {
           .selectedItemProperty().getValue().toString();
       save();
     });
+    if (Tread.loadedModpack != null) {
+      curseEnabled.setSelected(Tread.loadedModpack.export.twitchEnabled);
+      ftbEnabled.setSelected(Tread.loadedModpack.export.ftbEnabled);
+      technicEnabled.setSelected(Tread.loadedModpack.export.technicEnabled);
+      atEnabled.setSelected(Tread.loadedModpack.export.atEnabled);
+      skcraftEnabled.setSelected(Tread.loadedModpack.export.skcraftEnabled);
+      multicraftEnabled.setSelected(Tread.loadedModpack.export.multicraftEnabled);
+    }
   }
 
   public static void createNew() {

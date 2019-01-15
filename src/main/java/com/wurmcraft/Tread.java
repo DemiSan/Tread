@@ -1,5 +1,6 @@
 package com.wurmcraft;
 
+import com.wurmcraft.core.ModpackManager;
 import com.wurmcraft.core.json.Modpack;
 import java.io.IOException;
 import javafx.application.Application;
@@ -14,8 +15,10 @@ import javafx.stage.Stage;
 
 public class Tread extends Application {
 
+  // Default Settings
   public static final int WIDTH = 1280;
   public static final int HEIGHT = 720;
+  public static final String DEFAULT_MC = "1.12.2";
 
   public static Stage stage;
   public static Group root;
@@ -30,6 +33,7 @@ public class Tread extends Application {
   public void start(Stage stage) throws IOException {
     this.stage = stage;
     root = new Group();
+    ModpackManager.init();
     Parent mainGui = FXMLLoader.load(getClass().getResource("/main.fxml"));
     root.getChildren().add(mainGui);
     Scene scene = new Scene(root, WIDTH, HEIGHT);

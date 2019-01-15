@@ -23,36 +23,22 @@ import javafx.util.Duration;
 public class CoreGuiController implements Initializable {
 
   // Menu
-  @FXML
-  public MenuItem create;
-  @FXML
-  public MenuItem save;
-  @FXML
-  public MenuItem load;
-  @FXML
-  public MenuItem settings;
-  @FXML
-  public MenuItem close;
+  @FXML public MenuItem create;
+  @FXML public MenuItem save;
+  @FXML public MenuItem load;
+  @FXML public MenuItem settings;
+  @FXML public MenuItem close;
 
   // Settings
-  @FXML
-  public JFXTabPane modpackPane;
-  @FXML
-  public JFXCheckBox curseEnabled;
-  @FXML
-  public JFXCheckBox ftbEnabled;
-  @FXML
-  public JFXCheckBox technicEnabled;
-  @FXML
-  public JFXCheckBox atEnabled;
-  @FXML
-  public JFXCheckBox skcraftEnabled;
-  @FXML
-  public JFXCheckBox multicraftEnabled;
-  @FXML
-  public JFXComboBox minecraftVersion;
-  @FXML
-  public JFXComboBox forgeVersion;
+  @FXML public JFXTabPane modpackPane;
+  @FXML public JFXCheckBox curseEnabled;
+  @FXML public JFXCheckBox ftbEnabled;
+  @FXML public JFXCheckBox technicEnabled;
+  @FXML public JFXCheckBox atEnabled;
+  @FXML public JFXCheckBox skcraftEnabled;
+  @FXML public JFXCheckBox multicraftEnabled;
+  @FXML public JFXComboBox minecraftVersion;
+  @FXML public JFXComboBox forgeVersion;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -69,30 +55,48 @@ public class CoreGuiController implements Initializable {
       modpackPane.setVisible(false);
     }
     // Modpack Export Values
-    curseEnabled.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      Tread.loadedModpack.export.twitchEnabled = curseEnabled.isSelected();
-      save();
-    });
-    ftbEnabled.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      Tread.loadedModpack.export.ftbEnabled = ftbEnabled.isSelected();
-      save();
-    });
-    technicEnabled.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      Tread.loadedModpack.export.technicEnabled = technicEnabled.isSelected();
-      save();
-    });
-    atEnabled.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      Tread.loadedModpack.export.atEnabled = atEnabled.isSelected();
-      save();
-    });
-    skcraftEnabled.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      Tread.loadedModpack.export.skcraftEnabled = skcraftEnabled.isSelected();
-      save();
-    });
-    multicraftEnabled.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      Tread.loadedModpack.export.multicraftEnabled = multicraftEnabled.isSelected();
-      save();
-    });
+    curseEnabled
+        .selectedProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              Tread.loadedModpack.export.twitchEnabled = curseEnabled.isSelected();
+              save();
+            });
+    ftbEnabled
+        .selectedProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              Tread.loadedModpack.export.ftbEnabled = ftbEnabled.isSelected();
+              save();
+            });
+    technicEnabled
+        .selectedProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              Tread.loadedModpack.export.technicEnabled = technicEnabled.isSelected();
+              save();
+            });
+    atEnabled
+        .selectedProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              Tread.loadedModpack.export.atEnabled = atEnabled.isSelected();
+              save();
+            });
+    skcraftEnabled
+        .selectedProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              Tread.loadedModpack.export.skcraftEnabled = skcraftEnabled.isSelected();
+              save();
+            });
+    multicraftEnabled
+        .selectedProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              Tread.loadedModpack.export.multicraftEnabled = multicraftEnabled.isSelected();
+              save();
+            });
     // General Settings
     minecraftVersion.setItems(new ObservableListWrapper(getMinecraftVersions()));
     if (Tread.loadedModpack != null) {
@@ -102,24 +106,33 @@ public class CoreGuiController implements Initializable {
         }
       }
     }
-    forgeVersion.setItems(new ObservableListWrapper(getForgeVersions()));
+    forgeVersion.setItems(new ObservableListWrapper(getForgeVersions(Tread.DEFAULT_MC)));
     if (Tread.loadedModpack != null) {
-      for (int index = 0; index < getForgeVersions().size(); index++) {
-        if (Tread.loadedModpack.forgeVersion.equals(getForgeVersions().get(index))) {
+      forgeVersion.setItems(
+          new ObservableListWrapper(getForgeVersions(Tread.loadedModpack.mcVersion)));
+      for (int index = 0; index < getForgeVersions(Tread.loadedModpack.mcVersion).size(); index++) {
+        if (Tread.loadedModpack.forgeVersion.equals(
+            getForgeVersions(Tread.loadedModpack.mcVersion).get(index).toString())) {
           forgeVersion.getSelectionModel().select(index);
         }
       }
     }
-    minecraftVersion.selectionModelProperty().addListener((observable, oldValue, newValue) -> {
-      Tread.loadedModpack.mcVersion = minecraftVersion.getSelectionModel()
-          .selectedItemProperty().getValue().toString();
-      save();
-    });
-    forgeVersion.selectionModelProperty().addListener((observable, oldValue, newValue) -> {
-      Tread.loadedModpack.forgeVersion = forgeVersion.getSelectionModel()
-          .selectedItemProperty().getValue().toString();
-      save();
-    });
+    minecraftVersion
+        .selectionModelProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              Tread.loadedModpack.mcVersion =
+                  minecraftVersion.getSelectionModel().selectedItemProperty().getValue().toString();
+              save();
+            });
+    forgeVersion
+        .selectionModelProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              Tread.loadedModpack.forgeVersion =
+                  forgeVersion.getSelectionModel().selectedItemProperty().getValue().toString();
+              save();
+            });
     if (Tread.loadedModpack != null) {
       curseEnabled.setSelected(Tread.loadedModpack.export.twitchEnabled);
       ftbEnabled.setSelected(Tread.loadedModpack.export.ftbEnabled);
@@ -131,21 +144,22 @@ public class CoreGuiController implements Initializable {
   }
 
   public static void createNew() {
-    FadeTransition ft = new FadeTransition(Duration.millis(1500),
-        Tread.drawBackground());
+    FadeTransition ft = new FadeTransition(Duration.millis(1500), Tread.drawBackground());
     ft.setFromValue(0);
     ft.setToValue(1);
     ft.setCycleCount(1);
     ft.play();
-    ft.setOnFinished((e) -> {
-      try {
-        Tread.root.getChildren().clear();
-        Parent creation = FXMLLoader.load(CoreGuiController.class.getResource("/creation.fxml"));
-        Tread.root.getChildren().add(creation);
-      } catch (IOException f) {
-        f.printStackTrace();
-      }
-    });
+    ft.setOnFinished(
+        (e) -> {
+          try {
+            Tread.root.getChildren().clear();
+            Parent creation =
+                FXMLLoader.load(CoreGuiController.class.getResource("/creation.fxml"));
+            Tread.root.getChildren().add(creation);
+          } catch (IOException f) {
+            f.printStackTrace();
+          }
+        });
   }
 
   public static void save() {
@@ -161,8 +175,7 @@ public class CoreGuiController implements Initializable {
   }
 
   // TODO Implement
-  public static void openSettings() {
-  }
+  public static void openSettings() {}
 
   public static void saveAndExit() {
     save();
@@ -170,20 +183,20 @@ public class CoreGuiController implements Initializable {
   }
 
   public static void returnToMainGUI() {
-    FadeTransition ft = new FadeTransition(Duration.millis(1500),
-        Tread.drawBackground());
+    FadeTransition ft = new FadeTransition(Duration.millis(1500), Tread.drawBackground());
     ft.setFromValue(0);
     ft.setToValue(1);
     ft.setCycleCount(1);
     ft.play();
-    ft.setOnFinished((e) -> {
-      try {
-        Tread.root.getChildren().clear();
-        Parent main = FXMLLoader.load(CoreGuiController.class.getResource("/main.fxml"));
-        Tread.root.getChildren().add(main);
-      } catch (IOException f) {
-        f.printStackTrace();
-      }
-    });
+    ft.setOnFinished(
+        (e) -> {
+          try {
+            Tread.root.getChildren().clear();
+            Parent main = FXMLLoader.load(CoreGuiController.class.getResource("/main.fxml"));
+            Tread.root.getChildren().add(main);
+          } catch (IOException f) {
+            f.printStackTrace();
+          }
+        });
   }
 }

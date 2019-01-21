@@ -4,6 +4,7 @@ import static com.wurmcraft.Tread.GSON;
 
 import com.wurmcraft.Tread;
 import com.wurmcraft.modpack.builder.CurseBuilder;
+import com.wurmcraft.modpack.builder.TechnicBuilder;
 import com.wurmcraft.modpack.json.ForgeData;
 import com.wurmcraft.modpack.json.Mod;
 import com.wurmcraft.modpack.json.Modpack;
@@ -109,6 +110,13 @@ public class ModpackManager {
         twtich.mkdir();
       }
       CurseBuilder.build(twtich);
+    }
+    if (loadedModpack.export.technic) {
+      File technic = new File(modpackFile.getParent() + File.separator + "technic");
+      if (!technic.exists()) {
+        technic.mkdir();
+      }
+      TechnicBuilder.build(technic);
     }
   }
 

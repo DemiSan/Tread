@@ -10,10 +10,16 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTabPane;
 import com.wurmcraft.Tread;
+import com.wurmcraft.curse.CurseHelper;
+import com.wurmcraft.curse.json.ProjectData;
+import com.wurmcraft.gui.wrapper.ModWrapper;
 import com.wurmcraft.modpack.ModpackManager;
+import com.wurmcraft.modpack.json.Mod;
+import com.wurmcraft.utils.exception.InvalidModException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
@@ -23,24 +29,35 @@ import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 
 public class MainGui implements Initializable {
 
-  @FXML public MenuItem edit;
+  public MenuItem edit;
 
   // Settings
   @FXML public JFXTabPane modpackPane;
-  @FXML public JFXCheckBox curseEnabled;
-  @FXML public JFXCheckBox ftbEnabled;
-  @FXML public JFXCheckBox technicEnabled;
-  @FXML public JFXCheckBox atEnabled;
-  @FXML public JFXCheckBox skcraftEnabled;
-  @FXML public JFXCheckBox multicraftEnabled;
-  @FXML public JFXComboBox minecraftVersion;
-  @FXML public JFXComboBox forgeVersion;
+  public JFXCheckBox curseEnabled;
+  public JFXCheckBox ftbEnabled;
+  public JFXCheckBox technicEnabled;
+  public JFXCheckBox atEnabled;
+  public JFXCheckBox skcraftEnabled;
+  public JFXCheckBox multicraftEnabled;
+  public JFXComboBox minecraftVersion;
+  public JFXComboBox forgeVersion;
+
+  // Table
+  @FXML public TableView modTable;
+  public TableColumn nameColumn;
+  public TableColumn authorColumn;
+  public TableColumn versionColumn;
+  public TableColumn typeColumn;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -48,6 +65,8 @@ public class MainGui implements Initializable {
     manager = new ModpackManager();
     setModpackVisability();
     updateSettings();
+    setupTable();
+    updateTable();
   }
 
   public void saveAndQuit() {
@@ -88,8 +107,6 @@ public class MainGui implements Initializable {
           }
         });
   }
-
-  public void addMod() {}
 
   public void openSettings() {}
 
@@ -227,5 +244,64 @@ public class MainGui implements Initializable {
               } catch (Exception e) {
               }
             });
+  }
+
+  public void updateTable() {
+    if (ModpackManager.loadedModpack != null) {
+      modTable.getItems().clear();
+      for (Mod mod : ModpackManager.loadedModpack.mods) {
+        if (mod.isCurseDownload()) {
+          ProjectData data = CurseHelper.loadProjectData(mod);
+          // TODO Rework this to find selected version not just select one
+          for (int index = 0; index < data.gameVersionLatestFiles.size(); index++) {
+            if (data.gameVersionLatestFiles
+                .get(index)
+                .gameVersion
+                .equalsIgnoreCase(ModpackManager.loadedModpack.mcVersion)) {
+              modTable
+                  .getItems()
+                  .add(
+                      new ModWrapper(
+                          data.primaryAuthorName,
+                          data.name,
+                          data.gameVersionLatestFiles.get(index).projectFileName,
+                          data.primaryCategoryName));
+              continue;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  private void setupTable() {
+    authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
+    nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+    versionColumn.setCellValueFactory(new PropertyValueFactory<>("version"));
+    typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+  }
+
+  // TODO Check for Duplicates
+  @FXML
+  public void addMod() {
+    TextInputDialog dialog = new TextInputDialog();
+    dialog.setTitle("Add Mod");
+    dialog.setHeaderText("Enter the mods URL (Curse / Direct)");
+    dialog.setContentText("URL: ");
+    Optional<String> mod = dialog.showAndWait();
+    mod.ifPresent(
+        name -> {
+          try {
+            Mod m = ModpackManager.getModFromString(name);
+            ModpackManager.loadedModpack.mods.add(m);
+            updateTable();
+            save();
+          } catch (InvalidModException e) {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Error Converting");
+            alert.setHeaderText("Failed to convert URL to invalid mod");
+            alert.showAndWait();
+          }
+        });
   }
 }

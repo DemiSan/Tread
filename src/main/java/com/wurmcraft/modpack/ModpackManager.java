@@ -66,4 +66,8 @@ public class ModpackManager {
   public boolean isModpackLoaded() {
     return loadedModpack != null;
   }
+
+  public static Mod getModFromString(String input) {
+    return new Mod(input);
+  }
 }

@@ -1,16 +1,20 @@
 package com.wurmcraft.modpack.json;
 
 import com.wurmcraft.curse.CurseHelper;
+import com.wurmcraft.curse.json.ProjectData;
 import java.net.URL;
+import java.util.regex.Pattern;
 
 public class Mod {
+
+  public static final Pattern LAST_SEGMENT = Pattern.compile("[^/]+(?=/$|$)");
 
   public String name;
   public String urlData;
 
-  public Mod(String name, String urlData) {
-    this.name = name;
+  public Mod(String urlData) {
     this.urlData = urlData;
+    this.name = getName();
   }
 
   public boolean isDirectDownload() {
@@ -23,7 +27,7 @@ public class Mod {
 
   public boolean isCurseDownload() {
     try {
-      return CurseHelper.loadProjectData(Integer.parseInt(urlData.split(":")[0])) != null;
+      return CurseHelper.loadProjectData(CurseHelper.getProjectIDFromUserInput(urlData)) != null;
     } catch (NumberFormatException e) {
       // TODO Invalid Modpack Mod entry
     }
@@ -44,6 +48,22 @@ public class Mod {
       } catch (NumberFormatException e) {
         // TODO Invalid Modpack Mod entry
       }
+    }
+    return null;
+  }
+
+  private String getName() {
+    if (isCurseDownload()) {
+      return CurseHelper.loadProjectData(CurseHelper.getProjectIDFromUserInput(urlData)).slug;
+    } else if (isDirectDownload()) {
+      return LAST_SEGMENT.matcher(urlData).group();
+    }
+    return "";
+  }
+
+  public ProjectData getCurseProjectData() {
+    if (isCurseDownload()) {
+      return CurseHelper.loadProjectData(CurseHelper.getProjectIDFromUserInput(urlData));
     }
     return null;
   }

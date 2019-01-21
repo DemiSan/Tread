@@ -4,18 +4,18 @@ import java.util.*;
 
 public class ProjectData {
 
-  public int id;
+  public long id;
   public String name;
   public List<Author> authors;
   public List<Attachment> attachments;
   public String webSiteURL;
-  public int gameId;
+  public long gameId;
   public String summary;
-  public int defaultFileId;
-  public int commentCount;
+  public long defaultFileId;
+  public long commentCount;
   public double downloadCount;
-  public int rating;
-  public int installCount;
+  public long rating;
+  public long installCount;
   public List<ModFile> latestFiles;
   public List<Category> categories;
   public String primaryAuthorName;
@@ -25,7 +25,7 @@ public class ProjectData {
   public String donationUrl;
   public String primaryCategoryName;
   public String primaryCategoryAvatorUrl;
-  public int likes;
+  public long likes;
   public CategorySection categorySection;
   public String packageType;
   public String avatarUrl;
@@ -33,7 +33,7 @@ public class ProjectData {
   public String clientUrl;
   public List<GameFile> gameVersionLatestFiles;
   public double popularityScore;
-  public int gamePopularityRank;
+  public long gamePopularityRank;
   public String fullDescription;
   public String gameName;
   public String portalName;
@@ -45,18 +45,18 @@ public class ProjectData {
   public boolean available;
 
   public ProjectData(
-      int id,
+      long id,
       String name,
       List<Author> authors,
       List<Attachment> attachments,
       String webSiteURL,
-      int gameId,
+      long gameId,
       String summary,
-      int defaultFileId,
-      int commentCount,
+      long defaultFileId,
+      long commentCount,
       double downloadCount,
-      int rating,
-      int installCount,
+      long rating,
+      long installCount,
       List<ModFile> latestFiles,
       List<Category> categories,
       String primaryAuthorName,
@@ -66,7 +66,7 @@ public class ProjectData {
       String donationUrl,
       String primaryCategoryName,
       String primaryCategoryAvatorUrl,
-      int likes,
+      long likes,
       CategorySection categorySection,
       String packageType,
       String avatarUrl,
@@ -74,7 +74,7 @@ public class ProjectData {
       String clientUrl,
       List<GameFile> gameVersionLatestFiles,
       double popularityScore,
-      int gamePopularityRank,
+      long gamePopularityRank,
       String fullDescription,
       String gameName,
       String portalName,
@@ -133,8 +133,8 @@ public class ProjectData {
 
   public class Attachment {
 
-    public int id;
-    public int projectID;
+    public long id;
+    public long projectID;
     public String description;
     public String thumbnailUrl;
     public String title;
@@ -143,17 +143,17 @@ public class ProjectData {
 
   public class ModFile {
 
-    public int id;
+    public long id;
     public String fileName;
     public String fileNameOnDisk;
     public long fileDate;
     public String releaseType;
     public String fileStatus;
     public String downloadURL;
-    public int alternativeFileId;
+    public long alternativeFileId;
     public List<Dependencicy> dependencicies;
     public List<Module> modules;
-    public int packageFingerprint;
+    public long packageFingerprlong;
     public String[] gameVersion;
     public String installMetadata;
     public long fileLength;
@@ -163,19 +163,19 @@ public class ProjectData {
 
   public class Dependencicy {
 
-    public int addOnId;
+    public long addOnId;
     public String type;
   }
 
   public class Module {
 
-    public int fingerprint;
+    public long fingerprlong;
     public String foldername;
   }
 
   public class Category {
 
-    public int id;
+    public long id;
     public String name;
     public String url;
     public String avatarUrl;
@@ -183,8 +183,8 @@ public class ProjectData {
 
   public class CategorySection {
 
-    public int id;
-    public int gameID;
+    public long id;
+    public long gameID;
     public String name;
     public String packageType;
     public String path;
@@ -195,7 +195,7 @@ public class ProjectData {
   public class GameFile {
 
     public String gameVersion;
-    public int projectFileID;
+    public long projectFileID;
     public String projectFileName;
     public String fileType;
   }

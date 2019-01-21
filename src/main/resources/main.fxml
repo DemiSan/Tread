@@ -38,13 +38,12 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView prefHeight="680.0" prefWidth="1300.0">
+                        <TableView fx:id="modTable" prefHeight="680.0" prefWidth="1300.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="Name" />
-                              <TableColumn prefWidth="266.0" text="Author" />
-                              <TableColumn minWidth="0.0" prefWidth="231.0" text="Version" />
-                              <TableColumn minWidth="0.0" prefWidth="171.0" text="URL" />
-                              <TableColumn minWidth="0.0" prefWidth="171.0" text="Type" />
+                            <TableColumn fx:id="nameColumn" prefWidth="203.0" text="Name" />
+                              <TableColumn fx:id="authorColumn" prefWidth="268.0" text="Author" />
+                              <TableColumn fx:id="versionColumn" minWidth="0.0" prefWidth="259.0" text="Version" />
+                              <TableColumn fx:id="typeColumn" minWidth="0.0" prefWidth="191.0" text="Type" />
                           </columns>
                         </TableView>
                      </children>

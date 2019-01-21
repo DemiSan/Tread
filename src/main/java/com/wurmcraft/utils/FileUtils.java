@@ -13,8 +13,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Deque;
+import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 public class FileUtils {
@@ -138,5 +140,45 @@ public class FileUtils {
     } finally {
       in.close();
     }
+  }
+
+  // https://stackoverflow.com/questions/1399126/java-util-zip-recreating-directory-structure
+  public static void unzip(File zipfile, File directory) throws IOException {
+    ZipFile zfile = new ZipFile(zipfile);
+    Enumeration<? extends ZipEntry> entries = zfile.entries();
+    while (entries.hasMoreElements()) {
+      ZipEntry entry = entries.nextElement();
+      File file = new File(directory, entry.getName());
+      if (entry.isDirectory()) {
+        file.mkdirs();
+      } else {
+        file.getParentFile().mkdirs();
+        InputStream in = zfile.getInputStream(entry);
+        try {
+          copy(in, file);
+        } finally {
+          in.close();
+        }
+      }
+    }
+  }
+
+  private static void copy(InputStream in, File file) throws IOException {
+    OutputStream out = new FileOutputStream(file);
+    try {
+      copy(in, out);
+    } finally {
+      out.close();
+    }
+  }
+
+  public static boolean delete(File dir) {
+    File[] files = dir.listFiles();
+    if (files != null) {
+      for (File file : files) {
+        delete(file);
+      }
+    }
+    return dir.delete();
   }
 }

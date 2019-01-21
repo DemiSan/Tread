@@ -31,13 +31,13 @@ public class ModpackManager {
             "http://files.minecraftforge.net/maven/net/minecraftforge/forge/json", ForgeData.class);
   }
 
-  public void initModpack(Modpack modpack) {
+  public static void initModpack(Modpack modpack) {
     if (modpack != null && modpack.mods != null) {
       for (Mod mod : modpack.mods) {
         Tread.EXECUTORS.schedule((Runnable) mod::isCurseDownload, 0L, TimeUnit.SECONDS);
       }
     }
-    this.loadedModpack = modpack;
+    loadedModpack = modpack;
   }
 
   public boolean loadModpack(File file) {

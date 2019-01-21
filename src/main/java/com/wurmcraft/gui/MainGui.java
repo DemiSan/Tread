@@ -1,6 +1,7 @@
 package com.wurmcraft.gui;
 
 import static com.wurmcraft.Tread.DEFAULT_MC;
+import static com.wurmcraft.Tread.GSON;
 import static com.wurmcraft.Tread.HEIGHT;
 import static com.wurmcraft.Tread.WIDTH;
 import static com.wurmcraft.Tread.group;
@@ -11,16 +12,22 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTabPane;
 import com.wurmcraft.Tread;
 import com.wurmcraft.curse.CurseHelper;
+import com.wurmcraft.curse.json.CurseManifest;
+import com.wurmcraft.curse.json.CurseManifest.PackMod;
 import com.wurmcraft.curse.json.ProjectData;
 import com.wurmcraft.curse.json.ProjectData.Dependencicy;
 import com.wurmcraft.curse.json.ProjectData.ModFile;
 import com.wurmcraft.gui.wrapper.ModWrapper;
 import com.wurmcraft.modpack.ModpackManager;
 import com.wurmcraft.modpack.json.Mod;
+import com.wurmcraft.modpack.json.Modpack;
+import com.wurmcraft.utils.FileUtils;
 import com.wurmcraft.utils.exception.InvalidModException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.*;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
@@ -39,6 +46,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 public class MainGui implements Initializable {
 
@@ -85,6 +93,7 @@ public class MainGui implements Initializable {
   public void load() {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Open Modpack Json");
+    fileChooser.setSelectedExtensionFilter(new ExtensionFilter(".json", "json"));
     File file = fileChooser.showOpenDialog(Tread.stage);
     try {
       manager.loadModpack(file);
@@ -136,9 +145,48 @@ public class MainGui implements Initializable {
     return rect;
   }
 
-  public void importModpack() {}
+  public void importModpack() {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setSelectedExtensionFilter(new ExtensionFilter(".zip", "zip"));
+    fileChooser.setTitle("Open Curse Modpack");
+    File file = fileChooser.showOpenDialog(Tread.stage);
+    File tempFolder = new File("tempForImport");
+    if (!tempFolder.exists()) {
+      tempFolder.mkdir();
+    }
+    try {
+      FileUtils.unzip(file, tempFolder);
+      CurseManifest manifest =
+          GSON.fromJson(
+              FileUtils.getFileLines(new File(tempFolder + File.separator + "manifest.json")),
+              CurseManifest.class);
+      List<Mod> mods = new ArrayList<>();
+      for (PackMod mod : manifest.files) {
+        mods.add(new Mod(mod.projectID + ":" + mod.fileID));
+      }
+      Modpack modpack =
+          new Modpack(
+              manifest.name,
+              manifest.author,
+              manifest.minecraft.version,
+              getSimplifiedForgeVersion(manifest.minecraft.modLoaders.get(0).id),
+              manifest.version,
+              mods);
+      ModpackManager.initModpack(modpack);
+      save();
+      returnToMainGUI();
+    } catch (Exception e) {
+      Alert alert = new Alert(AlertType.WARNING);
+      alert.setTitle("Error Loading");
+      alert.setHeaderText("Invalid Curse Modpack");
+      alert.showAndWait();
+    }
+    FileUtils.delete(tempFolder);
+  }
 
-  public void exportModpack() {}
+  private static String getSimplifiedForgeVersion(String version) {
+    return version.substring(version.lastIndexOf(".") + 1);
+  }
 
   private void setModpackVisability() {
     if (manager.isModpackLoaded()) {

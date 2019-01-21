@@ -1,9 +1,9 @@
 package com.wurmcraft.curse;
 
 import com.wurmcraft.curse.json.ProjectData;
+import com.wurmcraft.curse.json.ProjectData.ModFile;
 import com.wurmcraft.modpack.json.Mod;
 import com.wurmcraft.utils.URLUtils;
-import java.net.URL;
 import org.cliffc.high_scale_lib.NonBlockingHashMap;
 
 public class CurseHelper {
@@ -11,10 +11,10 @@ public class CurseHelper {
   public static final String CURSE_API_LINK = "https://curse.nikky.moe/api/";
 
   public static NonBlockingHashMap<Long, ProjectData> projectCache = new NonBlockingHashMap<>();
+  public static NonBlockingHashMap<Long, ModFile> projectFileCache = new NonBlockingHashMap<>();
 
-  // TODO Implement
-  public static URL getDownloadLink(int projectID, int fileID) {
-    return null;
+  public static String getDownloadLink(long projectID, long fileID) {
+    return loadModFile(projectID, fileID).downloadURL;
   }
 
   public static ProjectData loadProjectData(long projectID) {
@@ -43,5 +43,29 @@ public class CurseHelper {
       e.printStackTrace();
       return -1L;
     }
+  }
+
+  public static ModFile loadModFile(long projectID, long fileID) {
+    if (projectFileCache.contains(fileID)) {
+      return projectFileCache.get(fileID);
+    } else {
+      ModFile fileData =
+          URLUtils.get(CURSE_API_LINK + "addon/" + projectID + "/file/" + fileID, ModFile.class);
+      projectFileCache.put(fileID, fileData);
+      return fileData;
+    }
+  }
+
+  public static long getModpackModVersion(String data) {
+    long projectID = getProjectIDFromUserInput(data);
+    ProjectData projectData = loadProjectData(projectID);
+    ModFile newestFile = projectData.latestFiles.get(0);
+    for (ModFile file : projectData.latestFiles) {
+      if (newestFile.fileDate < file.fileDate) {
+        newestFile = file;
+      }
+    }
+    projectFileCache.put(newestFile.id, newestFile);
+    return newestFile.id;
   }
 }

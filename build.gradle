@@ -18,8 +18,12 @@ apply plugin: 'java'
 sourceCompatibility = 1.8
 
 jar {
-    baseName = 'Fabricator'
+    baseName = 'Tread'
     version =  "${version}"
+
+    manifest {
+        attributes 'Main-Class': 'com.wurmcraft.Tread'
+    }
 }
 
 repositories {

@@ -12,6 +12,8 @@ import com.jfoenix.controls.JFXTabPane;
 import com.wurmcraft.Tread;
 import com.wurmcraft.curse.CurseHelper;
 import com.wurmcraft.curse.json.ProjectData;
+import com.wurmcraft.curse.json.ProjectData.Dependencicy;
+import com.wurmcraft.curse.json.ProjectData.ModFile;
 import com.wurmcraft.gui.wrapper.ModWrapper;
 import com.wurmcraft.modpack.ModpackManager;
 import com.wurmcraft.modpack.json.Mod;
@@ -28,6 +30,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -40,6 +43,7 @@ import javafx.stage.FileChooser;
 public class MainGui implements Initializable {
 
   public MenuItem edit;
+  public Menu build;
 
   // Settings
   @FXML public JFXTabPane modpackPane;
@@ -140,9 +144,11 @@ public class MainGui implements Initializable {
     if (manager.isModpackLoaded()) {
       modpackPane.setVisible(true);
       edit.setVisible(true);
+      build.setVisible(true);
     } else {
       modpackPane.setVisible(false);
       edit.setVisible(false);
+      build.setVisible(false);
     }
   }
 
@@ -254,10 +260,8 @@ public class MainGui implements Initializable {
           ProjectData data = CurseHelper.loadProjectData(mod);
           // TODO Rework this to find selected version not just select one
           for (int index = 0; index < data.gameVersionLatestFiles.size(); index++) {
-            if (data.gameVersionLatestFiles
-                .get(index)
-                .gameVersion
-                .equalsIgnoreCase(ModpackManager.loadedModpack.mcVersion)) {
+            if (data.gameVersionLatestFiles.get(index).projectFileID
+                == CurseHelper.getModpackModVersion(mod.urlData)) {
               modTable
                   .getItems()
                   .add(
@@ -266,9 +270,11 @@ public class MainGui implements Initializable {
                           data.name,
                           data.gameVersionLatestFiles.get(index).projectFileName,
                           data.primaryCategoryName));
-              continue;
+              break;
             }
           }
+        } else if (mod.isDirectDownload()) {
+          modTable.getItems().add(new ModWrapper("Unknown", mod.name, "Unknown", "Direct"));
         }
       }
     }
@@ -281,7 +287,6 @@ public class MainGui implements Initializable {
     typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
   }
 
-  // TODO Check for Duplicates
   @FXML
   public void addMod() {
     TextInputDialog dialog = new TextInputDialog();
@@ -293,9 +298,23 @@ public class MainGui implements Initializable {
         name -> {
           try {
             Mod m = ModpackManager.getModFromString(name);
-            ModpackManager.loadedModpack.mods.add(m);
-            updateTable();
-            save();
+            if (!ModpackManager.isModWithinModpack(name)) {
+              ModpackManager.loadedModpack.mods.add(m);
+              if (m.isCurseDownload()) {
+                ProjectData projectData = CurseHelper.loadProjectData(m);
+                ModFile modFile =
+                    CurseHelper.loadModFile(
+                        projectData.id, CurseHelper.getModpackModVersion(m.urlData));
+                for (Dependencicy dependencicy : modFile.dependencies) {
+                  if (dependencicy.type.equalsIgnoreCase("REQUIRED")) {
+                    Mod depMod = new Mod(dependencicy.addOnId + "");
+                    ModpackManager.loadedModpack.mods.add(depMod);
+                  }
+                }
+              }
+              updateTable();
+              save();
+            }
           } catch (InvalidModException e) {
             Alert alert = new Alert(AlertType.WARNING);
             alert.setTitle("Error Converting");
@@ -303,5 +322,11 @@ public class MainGui implements Initializable {
             alert.showAndWait();
           }
         });
+  }
+
+  public void buildModpack() {
+    if (ModpackManager.loadedModpack.export.twitch) {
+      ModpackManager.initBuild();
+    }
   }
 }

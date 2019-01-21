@@ -2,9 +2,13 @@ package com.wurmcraft.utils;
 
 import com.wurmcraft.Tread;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 public class URLUtils {
 
@@ -30,5 +34,16 @@ public class URLUtils {
       }
     }
     return null;
+  }
+
+  public static void download(String sourceURL, String saveDirectory) {
+    try {
+      URL url = new URL(sourceURL);
+      String fileName = sourceURL.substring(sourceURL.lastIndexOf('/') + 1);
+      Path targetPath = new File(saveDirectory + File.separator + fileName).toPath();
+      Files.copy(url.openStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }

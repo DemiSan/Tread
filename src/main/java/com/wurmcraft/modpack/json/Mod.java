@@ -34,17 +34,17 @@ public class Mod {
     return false;
   }
 
-  public URL getDownloadLink() {
+  public String getDownloadLink() {
     if (isDirectDownload()) {
       try {
-        return new URL(urlData);
+        return urlData;
       } catch (Exception e) {
       }
     } else if (isCurseDownload()) {
-      String[] splitData = urlData.split(":");
       try {
         return CurseHelper.getDownloadLink(
-            Integer.parseInt(splitData[0]), Integer.parseInt(splitData[1]));
+            CurseHelper.getProjectIDFromUserInput(urlData),
+            CurseHelper.getModpackModVersion(urlData));
       } catch (NumberFormatException e) {
         // TODO Invalid Modpack Mod entry
       }

@@ -151,7 +151,7 @@ public class ProjectData {
     public String fileStatus;
     public String downloadURL;
     public long alternativeFileId;
-    public List<Dependencicy> dependencicies;
+    public List<Dependencicy> dependencies;
     public List<Module> modules;
     public long packageFingerprlong;
     public String[] gameVersion;

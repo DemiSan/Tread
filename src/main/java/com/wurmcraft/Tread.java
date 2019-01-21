@@ -1,54 +1,49 @@
 package com.wurmcraft;
 
-import com.wurmcraft.core.ModpackManager;
-import com.wurmcraft.core.json.Modpack;
-import java.io.IOException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.wurmcraft.modpack.ModpackManager;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class Tread extends Application {
 
-  // Default Settings
+  // Default Values
   public static final int WIDTH = 1280;
   public static final int HEIGHT = 720;
   public static final String DEFAULT_MC = "1.12.2";
 
+  public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+  public static final ScheduledExecutorService EXECUTORS =
+      Executors.newScheduledThreadPool(
+          (Runtime.getRuntime().availableProcessors() - 2) > 0
+              ? (Runtime.getRuntime().availableProcessors() - 2)
+              : 1);
+
   public static Stage stage;
-  public static Group root;
-
-  public static Modpack loadedModpack;
-
-  public static void main(String[] args) {
-    launch(args);
-  }
+  public static Group group;
+  public static ModpackManager manager;
 
   @Override
-  public void start(Stage stage) throws IOException {
+  public void start(Stage stage) throws Exception {
     this.stage = stage;
-    root = new Group();
-    ModpackManager.init();
+    group = new Group();
+    // Load Default Gui
     Parent mainGui = FXMLLoader.load(getClass().getResource("/main.fxml"));
-    root.getChildren().add(mainGui);
-    Scene scene = new Scene(root, WIDTH, HEIGHT);
-    stage.setTitle("Tread");
-    stage.getIcons().add(new Image("logo.png"));
+    group.getChildren().add(mainGui);
+    // Set default values
+    Scene scene = new Scene(group, WIDTH, HEIGHT);
     stage.setScene(scene);
+    stage.setTitle("Tread");
     stage.setResizable(false);
+    stage.getIcons().add(new Image("logo.png"));
     stage.show();
-    stage.getScene().setFill(new Color(45 / 255f, 50 / 255f, 60 / 255f, 1));
-  }
-
-  public static Rectangle drawBackground() {
-    Rectangle rect = new Rectangle(0, 30, WIDTH + 200, HEIGHT + 200);
-    rect.setFill(new Color(45 / 255f, 50 / 255f, 60 / 255f, 1));
-    root.getChildren().add(rect);
-    return rect;
   }
 }

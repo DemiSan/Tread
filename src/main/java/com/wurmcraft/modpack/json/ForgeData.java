@@ -1,4 +1,4 @@
-package com.wurmcraft.core.json;
+package com.wurmcraft.modpack.json;
 
 import java.util.List;
 import java.util.Map;

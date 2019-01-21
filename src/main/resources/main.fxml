@@ -10,19 +10,24 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane id="border" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1300.0" styleClass="css\dark.css" stylesheets="@css/dark.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.wurmcraft.core.controllers.CoreGuiController">
+<BorderPane id="border" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1300.0" styleClass="css\dark.css" stylesheets="@css/dark.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.wurmcraft.gui.MainGui">
    <top>
       <MenuBar id="menu" minWidth="1280.0" stylesheets="@css/dark.css" BorderPane.alignment="CENTER">
         <menus>
           <Menu id="file" mnemonicParsing="false" text="File">
             <items>
-                  <MenuItem fx:id="create" mnemonicParsing="false" text="Create" />
-                  <MenuItem fx:id="save" mnemonicParsing="false" text="Save" />
-              <MenuItem fx:id="load" mnemonicParsing="false" text="Load" />
-                  <MenuItem fx:id="settings" mnemonicParsing="false" text="Settings" />
-                  <MenuItem fx:id="close" mnemonicParsing="false" text="Close" />
+                  <MenuItem fx:id="create" mnemonicParsing="false" onAction="#createNewModpack" text="Create" />
+                  <MenuItem fx:id="save" mnemonicParsing="false" onAction="#save" text="Save" />
+              <MenuItem fx:id="load" mnemonicParsing="false" onAction="#load" text="Load" />
+                  <MenuItem fx:id="settings" mnemonicParsing="false" onAction="#openSettings" text="Settings" />
+                  <MenuItem fx:id="close" mnemonicParsing="false" onAction="#saveAndQuit" text="Close" />
             </items>
           </Menu>
+            <Menu fx:id="edit" mnemonicParsing="false" text="Edit">
+               <items>
+                  <MenuItem fx:id="addmod" mnemonicParsing="false" onAction="#addMod" text="Add Mod" />
+               </items>
+            </Menu>
         </menus>
       </MenuBar>
    </top>
@@ -33,7 +38,7 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView prefHeight="662.0" prefWidth="1300.0">
+                        <TableView prefHeight="680.0" prefWidth="1300.0">
                           <columns>
                             <TableColumn prefWidth="75.0" text="Name" />
                               <TableColumn prefWidth="266.0" text="Author" />

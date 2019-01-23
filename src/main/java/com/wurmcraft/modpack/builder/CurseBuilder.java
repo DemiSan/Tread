@@ -1,5 +1,6 @@
 package com.wurmcraft.modpack.builder;
 
+import com.wurmcraft.Tread;
 import com.wurmcraft.curse.CurseHelper;
 import com.wurmcraft.curse.json.CurseManifest;
 import com.wurmcraft.curse.json.CurseManifest.Minecraft.ModLoader;
@@ -12,16 +13,23 @@ import com.wurmcraft.utils.URLUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class CurseBuilder {
 
   public static void build(File file) {
-    FileUtils.saveFile(new File(file + File.separator + "manifest.json"), createManifest());
-    createModList(new File(file + File.separator + "modlist.html"));
-    handleOverrides(new File(file + File.separator + "overrides"));
-    FileUtils.zipDir(
-        file,
-        new File(file.getParent() + File.separator + "build" + File.separator + "twitch.zip"));
+    Tread.EXECUTORS.schedule(
+        () -> {
+          FileUtils.saveFile(new File(file + File.separator + "manifest.json"), createManifest());
+          createModList(new File(file + File.separator + "modlist.html"));
+          handleOverrides(new File(file + File.separator + "overrides"));
+          FileUtils.zipDir(
+              file,
+              new File(
+                  file.getParent() + File.separator + "build" + File.separator + "twitch.zip"));
+        },
+        0,
+        TimeUnit.SECONDS);
   }
 
   public static CurseManifest createManifest() {

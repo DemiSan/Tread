@@ -1,22 +1,30 @@
 package com.wurmcraft.modpack.builder;
 
+import com.wurmcraft.Tread;
 import com.wurmcraft.modpack.ModpackManager;
 import com.wurmcraft.modpack.json.Mod;
 import com.wurmcraft.utils.FileUtils;
 import com.wurmcraft.utils.URLUtils;
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 public class TechnicBuilder {
 
   public static void build(File file) {
-    if (file.exists()) {
-      file.delete();
-    }
-    downloadForge(file);
-    handleOverrides(file);
-    FileUtils.zipDir(
-        file,
-        new File(file.getParent() + File.separator + "build" + File.separator + "technic.zip"));
+    Tread.EXECUTORS.schedule(
+        () -> {
+          if (file.exists()) {
+            file.delete();
+          }
+          downloadForge(file);
+          handleOverrides(file);
+          FileUtils.zipDir(
+              file,
+              new File(
+                  file.getParent() + File.separator + "build" + File.separator + "technic.zip"));
+        },
+        0,
+        TimeUnit.SECONDS);
   }
 
   public static void downloadForge(File file) {

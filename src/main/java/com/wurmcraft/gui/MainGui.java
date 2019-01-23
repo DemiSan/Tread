@@ -30,6 +30,7 @@ import java.util.*;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -306,7 +307,6 @@ public class MainGui implements Initializable {
       for (Mod mod : ModpackManager.loadedModpack.mods) {
         if (mod.isCurseDownload()) {
           ProjectData data = CurseHelper.loadProjectData(mod);
-          // TODO Rework this to find selected version not just select one
           for (int index = 0; index < data.gameVersionLatestFiles.size(); index++) {
             if (data.gameVersionLatestFiles.get(index).projectFileID
                 == CurseHelper.getModpackModVersion(mod.urlData)) {
@@ -344,31 +344,36 @@ public class MainGui implements Initializable {
     Optional<String> mod = dialog.showAndWait();
     mod.ifPresent(
         name -> {
-          try {
-            Mod m = ModpackManager.getModFromString(name);
-            if (!ModpackManager.isModWithinModpack(name)) {
-              ModpackManager.loadedModpack.mods.add(m);
-              if (m.isCurseDownload()) {
-                ProjectData projectData = CurseHelper.loadProjectData(m);
-                ModFile modFile =
-                    CurseHelper.loadModFile(
-                        projectData.id, CurseHelper.getModpackModVersion(m.urlData));
-                for (Dependencicy dependencicy : modFile.dependencies) {
-                  if (dependencicy.type.equalsIgnoreCase("REQUIRED")) {
-                    Mod depMod = new Mod(dependencicy.addOnId + "");
-                    ModpackManager.loadedModpack.mods.add(depMod);
+          Tread.EXECUTORS.schedule(
+              () -> {
+                try {
+                  Mod m = ModpackManager.getModFromString(name);
+                  if (!ModpackManager.isModWithinModpack(name)) {
+                    ModpackManager.loadedModpack.mods.add(m);
+                    if (m.isCurseDownload()) {
+                      ProjectData projectData = CurseHelper.loadProjectData(m);
+                      ModFile modFile =
+                          CurseHelper.loadModFile(
+                              projectData.id, CurseHelper.getModpackModVersion(m.urlData));
+                      for (Dependencicy dependencicy : modFile.dependencies) {
+                        if (dependencicy.type.equalsIgnoreCase("REQUIRED")) {
+                          Mod depMod = new Mod(dependencicy.addOnId + "");
+                          ModpackManager.loadedModpack.mods.add(depMod);
+                        }
+                      }
+                    }
+                    updateTable();
+                    save();
                   }
+                } catch (InvalidModException e) {
+                  Alert alert = new Alert(AlertType.WARNING);
+                  alert.setTitle("Error Converting");
+                  alert.setHeaderText("Failed to convert URL to invalid mod");
+                  alert.showAndWait();
                 }
-              }
-              updateTable();
-              save();
-            }
-          } catch (InvalidModException e) {
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.setTitle("Error Converting");
-            alert.setHeaderText("Failed to convert URL to invalid mod");
-            alert.showAndWait();
-          }
+              },
+              0,
+              TimeUnit.SECONDS);
         });
   }
 

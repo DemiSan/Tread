@@ -3,6 +3,7 @@ package com.wurmcraft.modpack.json;
 import com.wurmcraft.curse.CurseHelper;
 import com.wurmcraft.curse.json.ProjectData;
 import java.net.URL;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Mod {
@@ -15,21 +16,25 @@ public class Mod {
   public Mod(String urlData) {
     this.urlData = urlData;
     this.name = getName();
+    System.out.println(name);
   }
 
   public boolean isDirectDownload() {
     try {
       new URL(urlData);
+      return true;
     } catch (Exception e) {
     }
     return false;
   }
 
   public boolean isCurseDownload() {
-    try {
-      return CurseHelper.loadProjectData(CurseHelper.getProjectIDFromUserInput(urlData)) != null;
-    } catch (NumberFormatException e) {
-      // TODO Invalid Modpack Mod entry
+    if (!urlData.contains("http")) {
+      try {
+        return CurseHelper.loadProjectData(CurseHelper.getProjectIDFromUserInput(urlData)) != null;
+      } catch (NumberFormatException e) {
+        // TODO Invalid Modpack Mod entry
+      }
     }
     return false;
   }
@@ -56,7 +61,13 @@ public class Mod {
     if (isCurseDownload()) {
       return CurseHelper.loadProjectData(CurseHelper.getProjectIDFromUserInput(urlData)).slug;
     } else if (isDirectDownload()) {
-      return LAST_SEGMENT.matcher(urlData).group();
+      try {
+        Matcher matcher = LAST_SEGMENT.matcher(urlData);
+        matcher.find();
+        return matcher.group(0);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
     return "";
   }
